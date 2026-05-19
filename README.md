@@ -1,109 +1,80 @@
 📘 PeerSync
-🚀 Professional Peer-to-Peer Learning Platform
+🧩 Description du projet
 
-PeerSync is a professional-grade web platform built in PHP for managing peer-to-peer tutoring inside intensive coding bootcamps, training centers, and tech schools.
+PeerSync est une plateforme web développée en PHP POO permettant de gérer un système d’entraide entre apprenants et tuteurs dans un bootcamp intensif.
 
-It transforms informal learning support (Discord, chats, messages) into a structured, trackable, and scalable system.
+L’objectif est de remplacer les échanges informels (Discord, messages non structurés) par un système centralisé permettant de :
 
-This system can be deployed as a real-world SaaS solution for educational institutions to improve student success rates and tutor engagement.
+gérer les demandes d’aide
+suivre les sessions de tutorat
+évaluer les tuteurs
+mesurer l’impact de l’entraide
+🎯 Objectifs
+Centraliser les demandes d’aide des apprenants
+Connecter les apprenants avec des tuteurs disponibles
+Suivre le cycle complet d’une session (création → assignation → résolution)
+Évaluer les tuteurs via un système de notation
+Fournir des statistiques sur l’activité de la plateforme
+👥 Rôles utilisateurs
+🎓 Apprenant
+Créer une demande d’aide
+Suivre le statut de sa demande
+Marquer une demande comme résolue
+Noter le tuteur (1 à 5 étoiles)
+👨‍🏫 Tuteur
+Consulter les demandes en attente
+Accepter une demande
+Aider les apprenants
+Gagner des points et badges
+🛠️ Administrateur
+Consulter les statistiques globales
+Suivre les tuteurs les plus actifs
+Analyser les technologies les plus demandées
+⚙️ Technologies utilisées
+PHP 8+ (POO)
+MySQL
+PDO
+Architecture orientée objet
+Repository Pattern
+Enums PHP
+HTML / TailwindCSS
+🏗️ Architecture du projet
+config/ → Connexion base de données
+entities/ → Classes métier (User, HelpRequest, Review)
+repositories/ → Accès base de données (PDO uniquement)
+actions/ → Traitement des formulaires
+pages/ → Interface utilisateur
+enums/ → États (Status, Role)
+🔄 Fonctionnement général
+Un apprenant crée une demande d’aide
+La demande apparaît sur le tableau des tuteurs
+Un tuteur accepte la demande
+Une session d’entraide est réalisée
+L’apprenant marque la demande comme résolue
+L’apprenant note le tuteur
+Les statistiques sont mises à jour
+📊 Base de données
+Tables principales :
+users → utilisateurs (apprenants, tuteurs, admin)
+help_requests → demandes d’aide
+reviews → évaluations des tuteurs
+🧠 Concepts clés du projet
+Programmation orientée objet (POO)
+Encapsulation (propriétés privées)
+Typage strict PHP
+Hydratation d’objets
+Séparation des responsabilités
+Repository Pattern (SQL isolé)
+🚀 Installation
+git clone https://github.com/your-repo/peersync.git
+cd peersync
+Importer la base de données (sql/structure.sql)
+Configurer la connexion dans config/Database.php
+Lancer le projet sur un serveur local (XAMPP / WAMP)
+📌 Statut du projet
 
-💡 Vision
+🚧 Projet en cours de développement (Bootcamp ENAA)
 
-PeerSync is designed to:
+👨‍💻 Auteur
 
-Professionalize peer learning workflows
-Improve student success through structured support
-Allow institutions to measure tutoring impact
-Reward and motivate tutors through gamification
-Replace unorganized communication channels with a centralized system
-🏢 Potential Use Cases
-
-PeerSync can be used by:
-
-🎓 Coding bootcamps (like ENAA)
-🏫 Training centers
-🏢 Universities
-💼 Corporate learning programs
-🌐 Online learning platforms
-👥 Roles System
-🎓 Student
-Create structured help requests
-Track learning progress
-Receive personalized support from tutors
-Rate tutoring sessions
-👨‍🏫 Tutor
-Access real-time help requests
-Provide assistance efficiently
-Earn points and badges based on performance
-Build reputation within the platform
-🛠️ Administrator
-Monitor platform activity
-Analyze learning performance
-Track tutor engagement
-Export analytics reports
-⚙️ Technology Stack
-PHP 8+ (Object-Oriented Programming)
-MySQL (Relational Database)
-PDO (Secure database layer)
-Strict Typing (declare(strict_types=1))
-Repository Pattern Architecture
-Enum-based state management
-HTML / TailwindCSS (UI Layer)
-🏗️ Architecture Principles
-
-PeerSync follows a clean, scalable, and maintainable architecture:
-
-🔹 Full Object-Oriented Design
-🔹 Encapsulation (private properties + getters/setters)
-🔹 Separation of concerns (Entities / Repositories / Actions)
-🔹 No SQL inside business logic (Repositories only)
-🔹 Hydrated objects used in all views
-🔄 System Workflow
-Student submits a help request (POO, SQL, JS, etc.)
-Request becomes visible to available tutors
-Tutor assigns themselves to the request
-Live learning session takes place
-Student marks request as resolved
-Student rates tutor (1–5 stars)
-System updates statistics, points, and rankings
-🧠 Core Features
-✔ Real-time structured help request system
-✔ Tutor assignment & session tracking
-✔ Status management (Pending / Assigned / Resolved)
-✔ Rating & feedback system
-✔ Gamification (points, badges, leaderboard)
-✔ Admin analytics dashboard
-✔ Clean and scalable PHP architecture
-📊 Business Value
-
-PeerSync is not just a student project — it can evolve into a:
-
-💰 Subscription-based SaaS platform for schools
-📈 Analytics tool for training organizations
-🧑‍🏫 Tutor performance management system
-🎯 Student success optimization platform
-
-It improves:
-
-Student retention
-Learning efficiency
-Tutor engagement visibility
-🗄️ Core Database Entities
-users → students, tutors, admins
-help_requests → tutoring sessions
-reviews → feedback system
-badges → gamification layer
-🏆 Key Engineering Highlights
-Strong PHP OOP architecture
-Repository Pattern for database abstraction
-Strict type safety everywhere
-Clean hydration system (no raw arrays in views)
-Scalable structure ready for production
-🚧 Project Status
-
-MVP version built as part of an intensive bootcamp (ENAA).
-Designed with scalability and real-world deployment in mind.
-
-👨‍💻 Author
-
-Developed as a professional full-stack PHP project focused on real-world educational systems and scalable architecture design.
+Projet réalisé dans le cadre d’un bootcamp intensif de développement web.

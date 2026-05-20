@@ -69,3 +69,4 @@ actions/        → Traitement des formulaires
 pages/          → Interface utilisateur
 enums/          → États (Status, Role)
 ```
+<a>https://lucid.app/lucidchart/d1f41431-8eed-42c4-a3f3-044a351a4f59/edit?viewport_loc=-1652%2C-2010%2C6192%2C2631%2C0_0&invitationId=inv_d8428260-e23d-4498-a49e-5e6647d9854c

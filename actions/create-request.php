@@ -13,5 +13,5 @@ $repo->create([
     'student_id' => $_POST['student_id']
 ]);
 
-header("Location: ../pages/requests/index.php");
+header("Location: ../pages/dashboard/dashboard.php");
 exit();

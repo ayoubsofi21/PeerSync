@@ -336,7 +336,59 @@ $requests = $repo->findAll();
       <!-- Pending to take -->
       <div class="card">
         <h2 style="margin:0 0 1.25rem;font-size:15px;font-weight:700;">Demandes disponibles</h2>
-        <div id="tutor-requests-list"></div>
+        <!-- <div id="tutor-requests-list"></div> -->
+       
+         <?php  
+            $pendingRequests = array_filter($requests, function($r) {
+                return $r['status'] === 'PENDING';
+            });
+            ?>
+
+            <div id="tutor-requests-list">
+
+            <?php if (!empty($pendingRequests)): ?>
+
+                <?php foreach ($pendingRequests as $r): ?>
+                    <div class="card" style="margin-bottom:10px;">
+
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span class="badge badge-tag">
+                             <?= htmlspecialchars($r['technology']) ?>
+                            </span>
+                            <span class="badge badge-pending">En attente</span>
+                        </div>
+
+                        <h3 style="margin:10px 0 5px;font-size:15px;">
+                          <?= htmlspecialchars($r['title']) ?>
+                        </h3>
+
+                        <p style="margin:0 0 10px;color:var(--muted);font-size:13px;">
+                            <?= htmlspecialchars($r['description']) ?>
+                        </p>
+
+                        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+                            Par <strong><?= htmlspecialchars($r['author']) ?></strong>
+                        </div>
+
+                        <form action="../../actions/assign-request.php" method="POST">
+                            <input type="hidden" name="request_id" value="<?= $r['id'] ?>">
+                            <button class="btn-primary btn-sm" type="submit">
+                                Aider cet apprenant
+                            </button>
+                        </form>
+
+                    </div>
+                <?php endforeach; ?>
+
+            <?php else: ?>
+
+                <div style="text-align:center;padding:2rem;color:var(--muted);">
+                    Aucune demande en attente 🎉
+                </div>
+
+            <?php endif; ?>
+
+            </div>
       </div>
       <!-- Badges -->
       <div class="card">
@@ -597,11 +649,11 @@ function renderRequestCard(r, context = 'list') {
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
             ${statusBadge(r.status)}
-            <span class="badge badge-tag">${r.tech}</span>
+            <span class="badge badge-tag">${r.technology}</span>
             <span style="font-size:12px;color:var(--muted);margin-left:auto;">${r.date}</span>
           </div>
           <h3 style="margin:0 0 4px;font-size:15px;font-weight:600;">${r.title}</h3>
-          <p style="margin:0 0 8px;font-size:13px;color:var(--muted);">${r.desc}</p>
+          <p style="margin:0 0 8px;font-size:13px;color:var(--muted);">${r.description}</p>
           <div style="font-size:12px;color:var(--muted);">Par <strong>${r.author}</strong>${r.tutor ? ` · Tuteur : <strong>${r.tutor.name}</strong>` : ''}</div>
         </div>
       </div>
@@ -639,22 +691,39 @@ function renderRequests(filter = 'all', techFilter = '') {
   el.innerHTML = list.map(r => renderRequestCard(r, 'list')).join('');
 }
 
-function renderTutorSection() {
-  const pending = requests.filter(r => r.status === 'PENDING');
-  document.getElementById('tutor-requests-list').innerHTML = pending.length
-    ? pending.map(r => renderRequestCard(r, 'tutor')).join('<div style="height:10px;"></div>')
-    : `<div style="text-align:center;padding:2rem;color:var(--muted);">Aucune demande en attente 🎉</div>`;
-  document.getElementById('badges-list').innerHTML = badges.map(b => `
-    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
-      <div style="font-size:24px;opacity:${b.earned?1:.35};">${b.icon}</div>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:600;${b.earned?'':'color:var(--muted);'}">${b.name}</div>
-        <div style="font-size:11px;color:var(--muted);">${b.desc}</div>
-        ${!b.earned && b.progress !== undefined ? `<div class="progress-bar" style="margin-top:4px;"><div class="progress-fill" style="width:${b.progress}%;background:var(--purple);"></div></div>` : ''}
-      </div>
-      ${b.earned ? `<span style="color:var(--brand);font-size:18px;">✓</span>` : ''}
-    </div>`).join('');
-}
+// function renderTutorSection() {
+//   const pending = requests.filter(r => r.status === 'PENDING');
+
+//   document.getElementById('tutor-requests-list').innerHTML =
+//     pending.length
+//       ? pending.map(r => `
+//           <div class="card" style="margin-bottom:10px;">
+//             <div style="display:flex;justify-content:space-between;align-items:center;">
+//               <span class="badge badge-tag">${r.tech}</span>
+//               <span class="badge badge-pending">En attente</span>
+//             </div>
+
+//             <h3 style="margin:10px 0 5px;font-size:15px;">
+//               ${r.title}
+//             </h3>
+
+//             <p style="margin:0 0 10px;color:var(--muted);font-size:13px;">
+//               ${r.desc}
+//             </p>
+
+//             <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+//               Par <strong>${r.author}</strong>
+//             </div>
+
+//             <button class="btn-primary btn-sm" onclick="assignRequest(${r.id})">
+//               Aider cet apprenant
+//             </button>
+//           </div>
+//         `).join('')
+//       : `<div style="text-align:center;padding:2rem;color:var(--muted);">
+//           Aucune demande en attente 🎉
+//         </div>`;
+// }
 
 function renderLeaderboard() {
   const sorted = [...tutors].sort((a,b) => b.points - a.points);
@@ -748,14 +817,14 @@ function closeModal() {
 
 function submitRequest() {
   const title = document.getElementById('req-title').value.trim();
-  const tech = document.getElementById('req-tech').value;
-  const desc = document.getElementById('req-desc').value.trim();
+  const tech = document.getElementById('req-technology').value;
+  const desc = document.getElementById('req-description').value.trim();
   if (!title || !tech || !desc) { alert('Veuillez remplir tous les champs.'); return; }
-  requests.unshift({ id: Date.now(), title, tech, desc, status: 'PENDING', author: 'Youssef O.', date: 'À l\'instant' });
+  requests.unshift({ id: Date.now(), title, technology, description, status: 'PENDING', author: 'Youssef O.', date: 'À l\'instant' });
   closeModal();
   document.getElementById('req-title').value = '';
-  document.getElementById('req-tech').value = '';
-  document.getElementById('req-desc').value = '';
+  document.getElementById('req-technology').value = '';
+  document.getElementById('req-description').value = '';
   renderAll();
   showSuccess('Demande publiée !', `Votre demande "${title}" est maintenant visible par les tuteurs.`);
 }

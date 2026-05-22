@@ -41,21 +41,23 @@ class HelpRequestRepository
 
         $stmt->execute([$id]);
     }
-    public function findAll(): array
-{
-    $stmt = $this->pdo->query("SELECT * FROM help_requests ORDER BY id DESC");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+   public function findAll(): array
+    {
+        $stmt = $this->pdo->query("SELECT * FROM help_requests ORDER BY id DESC");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return array_map(function ($r) {
-    return [
-        'id' => $r['id'],
-        'title' => $r['title'],
-        'technology' => $r['technology'],
-        'description' => $r['description'],
-        'status' => strtoupper($r['status']), // ✅ FIX HERE
-        'author' => "Student #" . $r['student_id'],
-        'date' => $r['created_at'] ?? "now"
-    ];
-}, $rows);
-}
+        return array_map(function ($r) {
+            $obj = new stdClass();
+
+            $obj->id = $r['id'];
+            $obj->title = $r['title'];
+            $obj->technology = $r['technology'];
+            $obj->description = $r['description'];
+            $obj->status = strtoupper($r['status']); // FIX HERE
+            $obj->author = "Student #" . $r['student_id'];
+            $obj->date = $r['created_at'] ?? "now";
+
+            return $obj;
+        }, $rows);
+    }
 }

@@ -14,18 +14,24 @@ $total = count($requests);
 
 // En attente
 $pending = count(array_filter($requests, function($r) {
-    return $r['status'] === 'PENDING';
+    return $r->status === 'PENDING';
 }));
 
 // Assignées
 $assigned = count(array_filter($requests, function($r) {
-    return $r['status'] === 'ASSIGNED';
+    return $r->status === 'ASSIGNED';
 }));
 
 // Résolues
 $resolved = count(array_filter($requests, function($r) {
-    return $r['status'] === 'RESOLVED';
+    return $r->status === 'RESOLVED';
 }));
+
+// $requests = array_filter($requests, function($r) use ($status, $tech) {
+//     if ($status !== 'all' && $r->status !== $status) return false;
+//     if ($tech && $r->technology !== $tech) return false;
+//     return true;
+// });s
 
 ?>
 <!DOCTYPE html>
@@ -382,7 +388,7 @@ $resolved = count(array_filter($requests, function($r) {
        
          <?php  
             $pendingRequests = array_filter($requests, function($r) {
-                return $r['status'] === 'PENDING';
+                return $r->status === 'PENDING';
             });
             ?>
 
@@ -395,25 +401,25 @@ $resolved = count(array_filter($requests, function($r) {
 
                         <div style="display:flex;justify-content:space-between;align-items:center;">
                             <span class="badge badge-tag">
-                             <?= htmlspecialchars($r['technology']) ?>
+                             <?= htmlspecialchars($r->technology) ?>
                             </span>
                             <span class="badge badge-pending">En attente</span>
                         </div>
 
                         <h3 style="margin:10px 0 5px;font-size:15px;">
-                          <?= htmlspecialchars($r['title']) ?>
+                          <?= htmlspecialchars($r->title) ?>
                         </h3>
 
                         <p style="margin:0 0 10px;color:var(--muted);font-size:13px;">
-                            <?= htmlspecialchars($r['description']) ?>
+                            <?= htmlspecialchars($r->description) ?>
                         </p>
 
                         <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">
-                            Par <strong><?= htmlspecialchars($r['author']) ?></strong>
+                            Par <strong><?= htmlspecialchars($r->author) ?></strong>
                         </div>
 
                         <form action="../../actions/assign-request.php" method="POST">
-                            <input type="hidden" name="request_id" value="<?= $r['id'] ?>">
+                            <input type="hidden" name="request_id" value="<?= $r->id ?>">
                             <button class="btn-primary btn-sm" type="submit">
                                 Aider cet apprenant
                             </button>
@@ -647,7 +653,7 @@ const tutors = [
   { id: 5, name: "Omar Idrissi", initials: "OI", color: "#faeeda", textColor: "#633806", points: 200, sessions: 5, badges: [], rating: 4.3 },
 ];
 
-let requests = <?= json_encode($requests, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+
 
 const techData = [
   { name: "PHP / POO", count: 18, color: "#534ab7" },
@@ -936,16 +942,16 @@ function showSuccess(title, msg) {
   setTimeout(() => { m.style.display = 'none'; }, 3500);
 }
 
-function renderAll() {
-  renderDashboard();
-  renderRequests(activeFilter, activeTech);
-  renderTutorSection();
-  renderLeaderboard();
-  renderAdmin();
-}
+// function renderAll() {
+//   renderDashboard();
+//   renderRequests(activeFilter, activeTech);
+//   renderTutorSection();
+//   renderLeaderboard();
+//   renderAdmin();
+// }
 
 
-renderAll();
+// renderAll();
 </script>
 </body>
 </html>

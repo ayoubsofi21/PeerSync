@@ -1,6 +1,8 @@
 <?php
-enum Status: string{
-    case PENDING = 'pending';
-    case ASSIGNED = 'assigned';
-    case RESOLVED = 'resolved';
+
+enum Status: string
+{
+    case PENDING = 'PENDING';
+    case ASSIGNED = 'ASSIGNED';
+    case RESOLVED = 'RESOLVED';
 }

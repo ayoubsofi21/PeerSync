@@ -6,6 +6,27 @@ $pdo = Database::connect();
 
 $repo = new HelpRequestRepository($pdo);
 $requests = $repo->findAll();
+
+
+
+// Total demandes
+$total = count($requests);
+
+// En attente
+$pending = count(array_filter($requests, function($r) {
+    return $r['status'] === 'PENDING';
+}));
+
+// Assignées
+$assigned = count(array_filter($requests, function($r) {
+    return $r['status'] === 'ASSIGNED';
+}));
+
+// Résolues
+$resolved = count(array_filter($requests, function($r) {
+    return $r['status'] === 'RESOLVED';
+}));
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -236,23 +257,44 @@ $requests = $repo->findAll();
     </div>
 
     <!-- Stats -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:2rem;">
-      <div class="stat-card">
-        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--brand);" id="stat-total">12</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Total demandes</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:2rem;">
+
+  <div class="stat-card">
+        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--brand);">
+          <?= $total ?>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+          Total demandes
+        </div>
       </div>
+
       <div class="stat-card">
-        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--amber);" id="stat-pending">4</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">En attente</div>
+        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--amber);">
+          <?= $pending ?>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+          En attente
+        </div>
       </div>
+
       <div class="stat-card">
-        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--blue);">5</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Assignées</div>
+        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--blue);">
+          <?= $assigned ?>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+          Assignées
+        </div>
       </div>
+
       <div class="stat-card">
-        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--brand-mid);">3</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Résolues</div>
+        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif;color:var(--brand-mid);">
+          <?= $resolved ?>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+          Résolues
+        </div>
       </div>
+
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;">
@@ -678,8 +720,6 @@ function renderDashboard() {
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(t.count/max*100)}%;background:${t.color};"></div></div>
     </div>`).join('');
-  document.getElementById('stat-total').textContent = requests.length;
-  document.getElementById('stat-pending').textContent = requests.filter(r=>r.status==='PENDING').length;
 }
 
 function renderRequests(filter = 'all', techFilter = '') {
